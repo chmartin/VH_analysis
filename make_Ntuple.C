@@ -106,6 +106,9 @@ void make_Ntuple(std::string filename){
 				int V1Line = 99;
 				int V2Line = 99;
 				int foundV1 = 0;
+				Daughter_4vec.clear();
+				Daughter_id.clear();
+				Daughter_mother.clear();
 				//std::cout << numParticles << std::endl;
 				fin >> buffer;
 				while(strcmp(buffer, "</event>") != 0)

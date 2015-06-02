@@ -50,9 +50,9 @@ void read_Ntuple(std::string filename, bool applyRes=false){
     int V2_id = 0;
     int V2_mid = 0;
     //float mV2 = 0.;
-    std::vector <TLorentzVector> Daughter_4vec;
-    std::vector <int> Daughter_id;
-    std::vector <int> Daughter_mother;
+    std::vector <TLorentzVector> * Daughter_4vec;
+    std::vector <int> * Daughter_id;
+    std::vector <int> * Daughter_mother;
     //std::vector <float> Daughter_mass;
 
 
@@ -60,16 +60,16 @@ void read_Ntuple(std::string filename, bool applyRes=false){
     tree->SetBranchAddress("H", &H_4vec);
     //tree->Branch("mH", &mH);
     tree->SetBranchAddress("V0", &V0_4vec);
-    tree->SetBranchAddress("V0_id", V0_id);
-    tree->SetBranchAddress("V0_mid", V0_mid);
+    tree->SetBranchAddress("V0_id", &V0_id);
+    tree->SetBranchAddress("V0_mother", &V0_mid);
     //tree->Branch("mV0", &mV0);
     tree->SetBranchAddress("V1", &V1_4vec);
-    tree->SetBranchAddress("V1_id", V1_id);
-    tree->SetBranchAddress("V1_mid", V1_mid);
+    tree->SetBranchAddress("V1_id", &V1_id);
+    tree->SetBranchAddress("V1_mother", V1_mid);
     //tree->Branch("mV1", &mV1);
     tree->SetBranchAddress("V2", &V2_4vec);
     tree->SetBranchAddress("V2_id", &V2_id);
-    tree->SetBranchAddress("V2_mid", V2_mid);
+    tree->SetBranchAddress("V2_mother", &V2_mid);
     //tree->Branch("mV2", &mV2);
     tree->SetBranchAddress("Daughters", &Daughter_4vec);
     tree->SetBranchAddress("Daughter_id", &Daughter_id);
@@ -82,7 +82,14 @@ void read_Ntuple(std::string filename, bool applyRes=false){
     for(int event = 0; event < tree->GetEntries(); event++)
 	{
 		tree->GetEntry(event);
-		std::cout << H_4vec.M() << std::endl;
+		std::cout << H_4vec->M() << std::endl;
+		std::cout << Daughter_id->size() << std::endl;
+		for(int daughter = 0; daughter < Daughter_id->size(); daughter++)
+			{
+				std::cout << "\t" << Daughter_4vec->at(daughter)->M() << std::endl;
+				std::cout << "\t" << Daughter_id->at(daughter) << std::endl;
+			}
+		ctr++;
 	}
 
     std::cout << "Number of events processed: " << ctr << std::endl;
@@ -92,7 +99,7 @@ void read_Ntuple(std::string filename, bool applyRes=false){
 
     //fout.cd();
     //tree->Write();
-    inFile.Close();
+    inFile->Close();
 	
 }
 
